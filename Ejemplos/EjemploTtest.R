@@ -35,3 +35,18 @@ B <- Data$Tiempo[Data$Algoritmo == "Algorimo B"]
 
 plotNormalHistogram(A)
 plotNormalHistogram(B)
+
+# Diagrama de cajas
+M = tapply(Data$Tiempo, INDEX = Data$Algoritmo, FUN = mean)
+
+boxplot(Tiempo ~ Algoritmo, data = Data)
+
+points(M, col="red", pch="+", cex=2)
+
+#Debemos aplicar la prueba t para ver si son estadisticamente distintos
+
+t.test(Tiempo ~ Algoritmo, data=Data)
+
+
+#Distribucion normal y residuos y graficos Q-Q
+
