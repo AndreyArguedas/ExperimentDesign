@@ -93,3 +93,5 @@ Anova(model, type="II") #Suma de cuadrados
 #Histograma de residuos
 x = residuals(model)
 plotNormalHistogram(x)
+plot(fitted(model), residuals(model))
+plot(model)
