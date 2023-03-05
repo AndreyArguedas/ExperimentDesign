@@ -16,6 +16,7 @@ setwd("C:/Users/Andrey/Desktop/ExperimentDesign/Tareas/Tarea 1")
 library(rcompanion)
 library(ggplot2)
 library(car)
+library(repr)
 
 # Tarea 1
 
@@ -75,3 +76,57 @@ boxplot(Stpbnd ~ Lot, data = lot2_no_outliers)
 boxplot(Stpbnd ~ Lot, data = lot3_no_outliers)
 boxplot(Stpbnd ~ Lot, data = lot4_no_outliers)
 boxplot(Stpbnd ~ Lot, data = lot5_no_outliers)
+
+
+#Unir todos los datos pero sin outliers
+data_no_outliers <- rbind(control_no_outliers, lot1_no_outliers, lot2_no_outliers, lot3_no_outliers, lot4_no_outliers, lot5_no_outliers)
+
+#Info sobre los datos sin outliers
+Summarize(Stpbnd ~ Lot, data=data_no_outliers, digits=4)
+
+boxplot(Stpbnd ~ Lot, data = data_no_outliers)
+
+
+#Hisograma de Stpbnd pero con los datos originales
+options(repr.plot.width=16, repr.plot.height=10)
+plotNormalHistogram(Data$Stpbnd, main = "Stpbnd", breaks = 300)
+
+#Hisograma de Stpbnd pero sin outliers
+options(repr.plot.width=15, repr.plot.height=10)
+ggplot(data_no_outliers, aes(x=Stpbnd, fill=Stpbnd)) + 
+  geom_histogram(bins=200, alpha=0.1, position="dodge", colour = "black") + 
+  NULL
+
+#Colores diferentes para cada lot en el histograma
+options(repr.plot.width=15, repr.plot.height=10)
+ggplot(Data, aes(Stpbnd, fill = Lot)) +
+  geom_histogram(binwidth = 0.15)
+
+#Colores diferentes para cada lot en el histograma sin outliers
+options(repr.plot.width=15, repr.plot.height=10)
+ggplot(data_no_outliers, aes(Stpbnd, fill = Lot)) +
+  geom_histogram(binwidth = 0.15)
+
+
+#Grafico de cajas y bigotes incluyendo outliers
+boxplot(Stpbnd ~ Lot, data = Data)
+
+#Ajustando el grafico para un min de 24 y max de 30
+boxplot(Stpbnd ~ Lot, data = Data, ylim=c(24, 30))
+
+#Lotes con datos sin outliers
+# control <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Control",]
+# lot1 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 1",]
+# lot2 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 2",]
+# lot3 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 3",]
+# lot4 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 4",]
+# lot5 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 5",]
+
+options(repr.plot.width=20, repr.plot.height=20)
+par(mfrow=c(3,2))
+plotNormalHistogram(control_no_outliers$Stpbnd, xlim = c(24,29), main = "Control")
+plotNormalHistogram(lot1_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 1")
+plotNormalHistogram(lot2_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 2")
+plotNormalHistogram(lot3_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 3")
+plotNormalHistogram(lot4_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 4")
+plotNormalHistogram(lot5_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 5")
