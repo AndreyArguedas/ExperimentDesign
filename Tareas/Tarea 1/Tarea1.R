@@ -11,26 +11,31 @@ if(!require(multcompView)){install.packages("multcompView")}
 if(!require(multcomp)){install.packages("multcomp")}
 if(!require(lsmeans)){install.packages("lsmeans")}
 
-setwd("C:/Users/Andrey/Desktop/ExperimentDesign/Tareas/Tarea 1")
-
 library(rcompanion)
 library(ggplot2)
 library(car)
 library(repr)
 
-# Tarea 1
+# Directorio donde se encuentra el archivo
+setwd(this.path::here())
 
-# # Read a txt file, named "Datos tarea 1.txt"
+# Se leen los datos y se guardan en la variable Data
 my_data <- read.csv("Datos tarea 1.csv")
 Data = my_data
-rm(my_data) # Remove original data from memory
 
-names(Data)[names(Data) == "Stpbnd.2400.2482..S21..1."] <- "Stpbnd" #Por alguna razon el nombre original no se puede filtrar en R
+# Se eliminan los datos originales de memoria
+rm(my_data) 
+
+#Modificamos el nombre de la columna para que sea más sencillo trabajar
+names(Data)[names(Data) == "Stpbnd.2400.2482..S21..1."] <- "Stpbnd"
 
 headTail(Data)
 
 #Informacion basica
 Summarize(Stpbnd ~ Lot, data=Data, digits=4)
+
+# Grafico de cajas y bigotes de los datos originales
+boxplot(Stpbnd ~ Lot, data = Data)
 
 #Lotes
 control <- Data[Data$Lot == "Control",]
@@ -40,17 +45,6 @@ lot3 <- Data[Data$Lot == "Exp 3",]
 lot4 <- Data[Data$Lot == "Exp 4",]
 lot5 <- Data[Data$Lot == "Exp 5",]
 lot6 <- Data[Data$Lot == "Exp 6",]
-
-boxplot(Stpbnd ~ Lot, data = Data)
-
-#Histogramas por lote
-
-plotNormalHistogram(control$Stpbnd)
-plotNormalHistogram(lot1$Stpbnd)
-plotNormalHistogram(lot2$Stpbnd)
-plotNormalHistogram(lot3$Stpbnd)
-plotNormalHistogram(lot4$Stpbnd)
-plotNormalHistogram(lot5$Stpbnd)
 
 #Encontrar los outliers
 outliers_control <- boxplot(control$Stpbnd,plot=FALSE)$out
@@ -69,30 +63,30 @@ lot3_no_outliers <- lot3[-which(lot3$Stpbnd %in% outliers_lot3),]
 lot4_no_outliers <- lot4[-which(lot4$Stpbnd %in% outliers_lot4),]
 lot5_no_outliers <- lot5[-which(lot5$Stpbnd %in% outliers_lot5),]
 
-#Visualizacion de los datos sin outliers
-boxplot(Stpbnd ~ Lot, data = control_no_outliers)
-boxplot(Stpbnd ~ Lot, data = lot1_no_outliers)
-boxplot(Stpbnd ~ Lot, data = lot2_no_outliers)
-boxplot(Stpbnd ~ Lot, data = lot3_no_outliers)
-boxplot(Stpbnd ~ Lot, data = lot4_no_outliers)
-boxplot(Stpbnd ~ Lot, data = lot5_no_outliers)
-
-
 #Unir todos los datos pero sin outliers
 data_no_outliers <- rbind(control_no_outliers, lot1_no_outliers, lot2_no_outliers, lot3_no_outliers, lot4_no_outliers, lot5_no_outliers)
 
-#Info sobre los datos sin outliers
+#Visualizacion de los datos sin outliers
+options(repr.plot.width=20, repr.plot.height=20)
+par(mfrow=c(3,2))
+boxplot(Stpbnd ~ Lot, data = control_no_outliers, main = "Control")
+boxplot(Stpbnd ~ Lot, data = lot1_no_outliers, main = "Exp 1")
+boxplot(Stpbnd ~ Lot, data = lot2_no_outliers, main = "Exp 2")
+boxplot(Stpbnd ~ Lot, data = lot3_no_outliers, main = "Exp 3")
+boxplot(Stpbnd ~ Lot, data = lot4_no_outliers, main = "Exp 4")
+boxplot(Stpbnd ~ Lot, data = lot5_no_outliers, main = "Exp 5")
+
+
+#Información sobre los datos sin outliers
 Summarize(Stpbnd ~ Lot, data=data_no_outliers, digits=4)
 
 boxplot(Stpbnd ~ Lot, data = data_no_outliers)
 
-
-#Hisograma de Stpbnd pero con los datos originales
-options(repr.plot.width=16, repr.plot.height=10)
+#Histograma de Stpbnd pero con los datos originales
 plotNormalHistogram(Data$Stpbnd, main = "Stpbnd", breaks = 300)
 
-#Hisograma de Stpbnd pero sin outliers
-options(repr.plot.width=15, repr.plot.height=10)
+
+#Histograma de Stpbnd pero sin outliers
 ggplot(data_no_outliers, aes(x=Stpbnd, fill=Stpbnd)) + 
   geom_histogram(bins=200, alpha=0.1, position="dodge", colour = "black") + 
   NULL
