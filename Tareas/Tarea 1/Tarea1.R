@@ -83,10 +83,11 @@ Summarize(Stpbnd ~ Lot, data=data_no_outliers, digits=4)
 boxplot(Stpbnd ~ Lot, data = data_no_outliers)
 
 #Histograma de Stpbnd pero con los datos originales
-plotNormalHistogram(Data$Stpbnd, main = "Stpbnd", breaks = 300)
+#plotNormalHistogram(Data$Stpbnd, main = "Stpbnd", breaks = 300)
 
 
 #Histograma de Stpbnd pero sin outliers
+options(repr.plot.width=15, repr.plot.height=10)
 ggplot(data_no_outliers, aes(x=Stpbnd, fill=Stpbnd)) + 
   geom_histogram(bins=200, alpha=0.1, position="dodge", colour = "black") + 
   NULL
@@ -102,20 +103,7 @@ ggplot(data_no_outliers, aes(Stpbnd, fill = Lot)) +
   geom_histogram(binwidth = 0.15)
 
 
-#Grafico de cajas y bigotes incluyendo outliers
-boxplot(Stpbnd ~ Lot, data = Data)
-
-#Ajustando el grafico para un min de 24 y max de 30
-boxplot(Stpbnd ~ Lot, data = Data, ylim=c(24, 30))
-
-#Lotes con datos sin outliers
-# control <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Control",]
-# lot1 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 1",]
-# lot2 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 2",]
-# lot3 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 3",]
-# lot4 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 4",]
-# lot5 <- data_no_outliers$Stpbnd[data_no_outliers$Lot == "Exp 5",]
-
+#Histogramas en cascada
 options(repr.plot.width=20, repr.plot.height=20)
 par(mfrow=c(3,2))
 plotNormalHistogram(control_no_outliers$Stpbnd, xlim = c(24,29), main = "Control")
@@ -124,3 +112,12 @@ plotNormalHistogram(lot2_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 2")
 plotNormalHistogram(lot3_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 3")
 plotNormalHistogram(lot4_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 4")
 plotNormalHistogram(lot5_no_outliers$Stpbnd, xlim = c(24,29), main = "Exp 5")
+
+
+par(mfrow=c(1,2))
+#Grafico de cajas y bigotes incluyendo outliers
+boxplot(Stpbnd ~ Lot, data = Data)
+
+#Ajustando el grafico para un min de 24 y max de 30
+boxplot <- boxplot(Stpbnd ~ Lot, data = Data, ylim=c(24, 30))
+
