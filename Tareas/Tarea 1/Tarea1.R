@@ -64,7 +64,8 @@ lot4_no_outliers <- lot4[-which(lot4$Stpbnd %in% outliers_lot4),]
 lot5_no_outliers <- lot5[-which(lot5$Stpbnd %in% outliers_lot5),]
 
 #Unir todos los datos pero sin outliers
-data_no_outliers <- rbind(control_no_outliers, lot1_no_outliers, lot2_no_outliers, lot3_no_outliers, lot4_no_outliers, lot5_no_outliers)
+data_no_outliers <- rbind(control_no_outliers, lot1_no_outliers, lot2_no_outliers, lot3_no_outliers, 
+                          lot4_no_outliers, lot5_no_outliers)
 
 #Visualizacion de los datos sin outliers
 options(repr.plot.width=20, repr.plot.height=20)
@@ -81,9 +82,6 @@ boxplot(Stpbnd ~ Lot, data = lot5_no_outliers, main = "Exp 5")
 Summarize(Stpbnd ~ Lot, data=data_no_outliers, digits=4)
 
 boxplot(Stpbnd ~ Lot, data = data_no_outliers)
-
-#Histograma de Stpbnd pero con los datos originales
-#plotNormalHistogram(Data$Stpbnd, main = "Stpbnd", breaks = 300)
 
 
 #Histograma de Stpbnd pero sin outliers
