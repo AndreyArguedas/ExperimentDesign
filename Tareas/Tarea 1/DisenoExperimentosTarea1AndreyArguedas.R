@@ -118,4 +118,3 @@ boxplot(Stpbnd ~ Lot, data = Data)
 
 #Ajustando el grafico para un min de 24 y max de 30
 boxplot <- boxplot(Stpbnd ~ Lot, data = Data, ylim=c(24, 30))
-
