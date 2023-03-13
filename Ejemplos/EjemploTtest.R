@@ -1,5 +1,5 @@
 # Andrey Arguedas Espinoza
-# Diseno de Experimentos
+# Diseño de Experimentos
 # T-test
 
 #Factores : Algoritmo A y Algoritmo B
@@ -10,9 +10,12 @@ if(!require(lattice)){install.packages("lattice")}
 if(!require(lsr)){install.packages("lsr")}
 if(!require(rcompanion)){install.packages("rcompanion")}
 
-setwd("C:/Users/Andrey/Desktop/ExperimentDesign/Ejemplos")
-
 library(rcompanion)
+
+
+
+# Directorio donde se encuentra el archivo
+setwd(this.path::here())
 
 # # Read a txt file, named "Datos_t-test.txt"
 my_data <- readLines("Datos_t-test.txt")
@@ -27,7 +30,6 @@ str(Data) #Compact display
 summary(Data)
 
 #Analysis
-
 Summarize(Tiempo ~ Algoritmo, Data, digits = 4)
 
 A <- Data$Tiempo[Data$Algoritmo == "Algorimo A"]
