@@ -1,5 +1,5 @@
 # Andrey Arguedas Espinoza
-# Diseno de Experimentos - Tarea Anova con Bloques
+# Diseno de Experimentos - Tarea Anova con Bloques Modificacion Modelo Lineal
 
 if(!require(psych)){install.packages("psych")}
 if(!require(FSA)){install.packages("FSA")}
@@ -45,6 +45,7 @@ points(M, col="red", pch="+", cex=2)
 #Boxplot con segunda variable por bloques
 boxplot(Tiempo ~ Algoritmo + Computadora, data = Data)
 
+#Grafico de promedios e intervalos de confianza
 
 # Grafico de promedios e intervalos de confianza
 Sum = groupwiseMean(Tiempo ~ Algoritmo, Data, conf = 0.95, digits = 3, traditional = FALSE, percentile = TRUE)
@@ -80,8 +81,8 @@ ggplot(Sum ,aes(x=Algoritmo, y=Mean))+
   ylab("Tiempo promedio, s")
 
 
-#Modelo Lineal
-model = lm(Tiempo ~ Algoritmo + Computadora, Data)
+#Modelo Lineal - Cambiamos de factor bloque a multifactorial
+model = lm(Tiempo ~ Algoritmo : Computadora, Data)
 
 summary(model) 
 

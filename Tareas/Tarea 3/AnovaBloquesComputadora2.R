@@ -1,5 +1,5 @@
 # Andrey Arguedas Espinoza
-# Diseno de Experimentos - Tarea Anova con Bloques
+# Diseno de Experimentos - Tarea Anova con Bloques Solo Computadora 2
 
 if(!require(psych)){install.packages("psych")}
 if(!require(FSA)){install.packages("FSA")}
@@ -25,47 +25,23 @@ Data = my_data
 # Se eliminan los datos originales de memoria
 rm(my_data) 
 
-Data$Algoritmo = factor(Data$Algoritmo, levels = unique(Data$Algoritmo))
+filteredData <- Data[Data$Computadora == "Computadora 2",]
 
-Data$Computadora = factor(Data$Computadora, levels = unique(Data$Computadora))
+headTail(filteredData)
+str(filteredData)
+summary(filteredData)
 
-headTail(Data)
-str(Data)
-summary(Data)
-
-Summarize(Tiempo ~ Algoritmo + Computadora, Data, digits = 3)
+Summarize(Tiempo ~ Algoritmo, filteredData, digits = 3)
 
 # Diagrama de cajas - Recordar que los bigotes es el rango
-M = tapply(Data$Tiempo, INDEX = Data$Algoritmo, FUN = mean)
+M = tapply(filteredData$Tiempo, INDEX = filteredData$Algoritmo, FUN = mean)
 
-boxplot(Tiempo ~ Algoritmo, data = Data)
+boxplot(Tiempo ~ Algoritmo, data = filteredData)
 
 points(M, col="red", pch="+", cex=2)
 
-#Boxplot con segunda variable por bloques
-boxplot(Tiempo ~ Algoritmo + Computadora, data = Data)
-
-
 # Grafico de promedios e intervalos de confianza
-Sum = groupwiseMean(Tiempo ~ Algoritmo, Data, conf = 0.95, digits = 3, traditional = FALSE, percentile = TRUE)
-
-#Mostrar promedios e intervalos de confianza
-Sum
-
-#Grafico promedios e intervalos de confianza
-
-ggplot(Sum ,aes(x=Algoritmo, y=Mean))+
-  geom_errorbar(aes(ymin=Percentile.lower, ymax=Percentile.upper), width=0.05, size=0.5)+
-  geom_point(shape=15, size=4)+
-  theme_bw()+
-  theme(axis.title = element_text(face='bold'))+
-  ylab("Tiempo promedio, s")
-
-
-#Cambio para considerar la computadora
-
-# Grafico de promedios e intervalos de confianza
-Sum = groupwiseMean(Tiempo ~ Algoritmo + Computadora, Data, conf = 0.95, digits = 3, traditional = FALSE, percentile = TRUE)
+Sum = groupwiseMean(Tiempo ~ Algoritmo, filteredData, conf = 0.95, digits = 3, traditional = FALSE, percentile = TRUE)
 
 #Mostrar promedios e intervalos de confianza
 Sum
@@ -81,7 +57,7 @@ ggplot(Sum ,aes(x=Algoritmo, y=Mean))+
 
 
 #Modelo Lineal
-model = lm(Tiempo ~ Algoritmo + Computadora, Data)
+model = lm(Tiempo ~ Algoritmo, filteredData)
 
 summary(model) 
 
