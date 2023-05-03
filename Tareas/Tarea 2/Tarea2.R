@@ -31,8 +31,59 @@ filtered_data = original_data
 #Preprocesamiento de los datos
 
 #Eliminando datos no necesarios
-filtered_data = str_remove_all(filtered_data, "user.*$")
-filtered_data = str_remove_all(filtered_data, "sys.*$")
-filtered_data = str_remove_all(filtered_data, regex(".*(?=image written).*$"))
+filtered_data = str_replace_all(filtered_data, "user.*$", "")
+filtered_data = str_replace_all(filtered_data, "sys.*$", "")
+filtered_data = str_replace_all(filtered_data, "real ", "")
+filtered_data = str_replace_all(filtered_data, regex(".*(?=image written).*$"), "")
+filtered_data = str_remove_all(filtered_data, regex(".*(?=_)"))
 
-filtered_data 
+#Eliminando todos las lineas que quedaron en blanco
+empty_lines = grepl('^\\s*$', filtered_data)
+filtered_data = filtered_data[! empty_lines]
+
+filtered_data
+copy_of_filtered_data = filtered_data
+
+#Datos filtrados para obtener solo el tiempo de ejecucion
+
+only_time_data = str_remove_all(filtered_data, regex("(?=_).*"))
+#Eliminando todos las lineas que quedaron en blanco
+empty_lines = grepl('^\\s*$', only_time_data)
+only_time_data = only_time_data[! empty_lines]
+
+only_time_data
+
+#Datos filtrados para obtener solo la columna de mas informacion
+only_technical_data = str_remove_all(filtered_data, regex("^[0-9].*(?=.).*"))
+#Eliminando todos las lineas que quedaron en blanco
+empty_lines = grepl('^\\s*$', only_technical_data)
+only_technical_data = only_technical_data[! empty_lines]
+
+only_technical_data
+
+
+#Convirtiendo las lineas de tipo  _(cantidad de objetos)(arquitectura)(efectos en la escena)-(resolución de la escena) en datos separados
+
+#Obteniendo la resolucion
+resolucion = str_remove_all(only_technical_data, regex(".*(?=-)"))
+
+resolucion
+
+
+#Obteniendo los efectos de la escena
+efectos = str_remove_all(only_technical_data, regex("(?=-).*"))
+efectos = str_remove_all(efectos, regex(".*GPU"))
+efectos = str_remove_all(efectos, regex(".*APU"))
+efectos = str_remove_all(efectos, regex(".*CPU"))
+
+efectos
+
+#Obteniendo los ARQUITECTURA de la escena
+arquitectura = str_remove_all(only_technical_data, regex(".*(?=GPU)"))
+arquitectura = str_remove_all(arquitectura, regex("(?<=GPU).*"))
+arquitectura = str_remove_all(arquitectura, regex(".*(?=APU)"))
+arquitectura = str_remove_all(arquitectura, regex("(?<=APU).*"))
+arquitectura = str_remove_all(arquitectura, regex(".*(?=CPU)"))
+arquitectura = str_remove_all(arquitectura, regex("(?<=CPU).*"))
+
+arquitectura
