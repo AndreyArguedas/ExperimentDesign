@@ -87,3 +87,12 @@ arquitectura = str_remove_all(arquitectura, regex(".*(?=CPU)"))
 arquitectura = str_remove_all(arquitectura, regex("(?<=CPU).*"))
 
 arquitectura
+
+#Obteniendo la cantidad de objetos de la escena
+objetos = str_remove_all(only_technical_data, regex("(?=GPU).*"))
+objetos = str_remove_all(objetos, regex("(?=CPU).*"))
+objetos = str_remove_all(objetos, regex("(?=APU).*"))
+objetos = str_replace_all(objetos, "_", "")
+
+
+objetos
