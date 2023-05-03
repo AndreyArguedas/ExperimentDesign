@@ -18,7 +18,7 @@ library(car)
 library(repr)
 library(dplyr)
 library(stringr)
-
+library(data.table)
 
 # Directorio donde se encuentra el archivo
 setwd(this.path::here())
@@ -42,7 +42,6 @@ empty_lines = grepl('^\\s*$', filtered_data)
 filtered_data = filtered_data[! empty_lines]
 
 filtered_data
-copy_of_filtered_data = filtered_data
 
 #Datos filtrados para obtener solo el tiempo de ejecucion
 
@@ -94,5 +93,16 @@ objetos = str_remove_all(objetos, regex("(?=CPU).*"))
 objetos = str_remove_all(objetos, regex("(?=APU).*"))
 objetos = str_replace_all(objetos, "_", "")
 
-
 objetos
+
+# create a data table from a data frame
+data_frame <- data.frame(RunningTime=rep(c(only_time_data)),
+                            Objetos=rep(c(objetos)),
+                            Architecture=rep(c(arquitectura)),
+                            Effects=rep(c(efectos)),
+                            Resolution=rep(c(resolucion)))
+
+data_frame
+
+write.table(data_frame, "Datos2kTabla.txt")
+
