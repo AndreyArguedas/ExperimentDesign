@@ -65,6 +65,7 @@ only_technical_data
 
 #Obteniendo la resolucion
 resolucion = str_remove_all(only_technical_data, regex(".*(?=-)"))
+resolucion = str_replace_all(resolucion, "-", "")
 
 resolucion
 
@@ -105,4 +106,24 @@ data_frame <- data.frame(RunningTime=rep(c(only_time_data)),
 data_frame
 
 write.table(data_frame, "Datos2kTabla.txt")
+
+
+# Se leen los datos y se guardan en la variable Data
+my_data <- read.table("Datos2kTabla.txt", header=TRUE)
+Data = my_data
+
+# Se eliminan los datos originales de memoria
+rm(my_data) 
+rm(data_frame)
+rm(objetos)
+rm(arquitectura)
+rm(efectos)
+rm(resolucion)
+rm(only_technical_data)
+rm(filtered_data)
+rm(original_data)
+
+headTail(Data)
+str(Data)
+summary(Data)
 
