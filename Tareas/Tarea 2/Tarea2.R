@@ -46,6 +46,7 @@ filtered_data
 #Datos filtrados para obtener solo el tiempo de ejecucion
 
 only_time_data = str_remove_all(filtered_data, regex("(?=_).*"))
+only_time_data = str_replace_all(only_time_data, ",", ".")
 #Eliminando todos las lineas que quedaron en blanco
 empty_lines = grepl('^\\s*$', only_time_data)
 only_time_data = only_time_data[! empty_lines]
@@ -105,11 +106,11 @@ data_frame <- data.frame(RunningTime=rep(c(only_time_data)),
 
 data_frame
 
-write.table(data_frame, "Datos2kTabla.txt")
+write.table(data_frame, "Datos2kTabla.txt", quote = FALSE, row.names=FALSE)
 
 
 # Se leen los datos y se guardan en la variable Data
-my_data <- read.table("Datos2kTabla.txt", header=TRUE)
+my_data <- read.table("Datos2kTabla.txt", header=TRUE, colClasses = c("numeric", "factor", "factor", "factor", "factor"))
 Data = my_data
 
 # Se eliminan los datos originales de memoria
