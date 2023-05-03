@@ -128,3 +128,141 @@ headTail(Data)
 str(Data)
 summary(Data)
 
+
+
+data_apu = Data[Data$Architecture == "APU",]
+headTail(data_apu)
+summary(data_apu)
+
+
+#Summarize(RunningTime ~ Objetos * Effects, data=data_apu, digits=4)
+
+plotNormalHistogram(Data[Data$Architecture == "APU",]$RunningTime, main="APU")
+plotNormalHistogram(Data[Data$Architecture == "CPU",]$RunningTime, main="CPU")
+plotNormalHistogram(Data[Data$Architecture == "GPU",]$RunningTime, main="GPU")
+
+
+#Grafico simple de interaccion, se hace antes de analisis de varianzas y modelos
+
+interaction.plot(x.factor= Data$Objetos,
+                 trace.factor= Data$Architecture,
+                 response = Data$RunningTime,
+                 fun=mean, type="b", col=c("black", "red", "green"),
+                 pch=c(19,17,15), fixed=TRUE, leg.bty="o")
+
+#Grafico simple de interaccion, se hace antes de analisis de varianzas y modelos
+
+interaction.plot(x.factor= Data$Objetos,
+                 trace.factor= Data$Architecture,
+                 response = Data$RunningTime,
+                 fun=mean, type="b", col=c("black", "red", "green"),
+                 pch=c(19,17,15), fixed=TRUE, leg.bty="o")
+
+interaction.plot(x.factor= Data$Effects,
+                 trace.factor= Data$Architecture,
+                 response = Data$RunningTime,
+                 fun=mean, type="b", col=c("black", "red", "green"),
+                 pch=c(19,17,15), fixed=TRUE, leg.bty="o")
+
+interaction.plot(x.factor= Data$Resolution,
+                 trace.factor= Data$Architecture,
+                 response = Data$RunningTime,
+                 fun=mean, type="b", col=c("black", "red", "green"),
+                 pch=c(19,17,15), fixed=TRUE, leg.bty="o")
+
+
+#Definimos Modelo Lineal y Anova
+
+
+model = lm(RunningTime ~ Objetos * Effects * Resolution
+           , data=Data)
+
+Anova(model, type="II")
+
+#Evaluacion de los supuestos
+x =  residuals(model)
+plotNormalHistogram(x)
+
+#Ver el patron homcedasteicidad
+plot(fitted(model), residuals(model))
+
+
+plot(model)
+
+#Transformacion de datos - Por raiz cuadrada
+
+T.sqrt = sqrt(Data$RunningTime)
+
+model = lm(T.sqrt ~ Objetos * Effects * Resolution, data=Data)
+
+Anova(model, type="II")
+
+x =  residuals(model)
+plotNormalHistogram(x)
+
+#Ver el patron homcedasteicidad
+plot(fitted(model), residuals(model))
+
+plot(model)
+
+
+#TRANSFORMACION DE DATOS - POR RAIZ CUBICA
+
+#La transformacion se aplica sobre la variable dependiente
+T.cub = sign(Data$RunningTime) * abs(Data$RunningTime) ^ (1/3)
+
+model = lm(T.cub ~ Objetos * Effects * Resolution
+           , data=Data)
+
+Anova(model, type="II")
+
+x =  residuals(model)
+plotNormalHistogram(x)
+
+#Ver el patron homcedasteicidad
+plot(fitted(model), residuals(model))
+
+plot(model)
+
+
+#Prueba de LEVEN para homocedasticidad 
+#Para esta prueba mas bien queremos un p-value alto
+leveneTest(T.cub ~ Objetos * Effects * Resolution, data=Data)
+
+
+
+# #TRANSFORMACION DE DATOS - POR LOGARITMO
+# 
+# #La transformacion se aplica sobre la variable dependiente
+# T.log = log(Data$RunningTime)
+# 
+# model = lm(T.log ~ Objetos * Effects * Resolution
+#            , data=Data)
+# 
+# Anova(model, type="II")
+# 
+# x =  residuals(model)
+# plotNormalHistogram(x)
+# 
+# #Ver el patron homcedasteicidad
+# plot(fitted(model), residuals(model))
+# 
+# plot(model)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
