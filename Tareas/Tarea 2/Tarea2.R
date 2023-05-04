@@ -230,117 +230,130 @@ CLD
 
 #Final part
 
-# #Graficos Finales
-# Sum = Summarize(T.log ~ Entrenamiento + Algoritmo, data=Data, digits=3)
-# 
-# #Agregamos el se
-# 
-# Sum$se = Sum$sd / sqrt(Sum$n)
-# Sum$se = signif(Sum$se, digits=3)
-# Sum
-# 
-# #Ordenamos
-# Sum$Entrenamiento = factor(Sum$Entrenamiento, levels=unique(Sum$Entrenamiento))
-# 
-# #Graficamos
-# 
-# pd=position_dodge(.2)
-# 
-# ggplot(Sum, aes(x = Entrenamiento, y = mean, color = Algoritmo)) +
-#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
-#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
-#   scale_color_manual(values=c("black", "red", "green"))
-# ylab("Rendimiento")
-# 
-# #Graficos Finales
-# Sum = Summarize(T.log ~ Acelerador + Algoritmo, data=Data, digits=3)
-# 
-# #Agregamos el se
-# 
-# Sum$se = Sum$sd / sqrt(Sum$n)
-# Sum$se = signif(Sum$se, digits=3)
-# Sum
-# 
-# #Ordenamos
-# Sum$Entrenamiento = factor(Sum$Acelerador, levels=unique(Sum$Acelerador))
-# 
-# #Graficamos
-# 
-# pd=position_dodge(.2)
-# 
-# ggplot(Sum, aes(x = Acelerador, y = mean, color = Algoritmo)) +
-#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
-#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
-#   scale_color_manual(values=c("black", "red", "green"))
-# ylab("Rendimiento")
-# 
-# 
-# 
-# 
-# #GRAFICO PRINICIPAL - PROMEDIOS TRANSFORMADOS
-# 
-# 
-# Sum = Summarize(T.log ~ Algoritmo, data=Data, digits=3)
-# 
-# #Agregamos el se
-# 
-# Sum$se = Sum$sd / sqrt(Sum$n)
-# Sum$se = signif(Sum$se, digits=3)
-# Sum
-# 
-# #Ordenamos
-# Sum$Algoritmo = factor(Sum$Algoritmo, levels=unique(Sum$Algoritmo))
-# 
-# #Graficamos
-# 
-# pd=position_dodge(.2)
-# 
-# ggplot(Sum, aes(x = Algoritmo, y = mean, color = Algoritmo)) +
-#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
-#   geom_point(shape=15, size=4, position=pd) +
-#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
-#   scale_color_manual(values=c("black", "red", "green"))
-# ylab("Logaritmo de Rendimiento")
-# 
-# 
-# #Ahora des-transformemos
-# 
-# Sum = Summarize(T.log ~ Algoritmo, data=Data, digits=3)
-# 
-# 
-# Sum$mean = exp(Sum$mean)
-# Sum$sd = exp(Sum$sd )
-# Sum
-# 
-# #Agregamos el se
-# 
-# Sum$se = Sum$sd / sqrt(Sum$n)
-# Sum$se = signif(Sum$se, digits=3)
-# Sum
-# 
-# #Ordenamos
-# Sum$Algoritmo = factor(Sum$Algoritmo, levels=unique(Sum$Algoritmo))
-# 
-# #Graficamos
-# 
-# pd=position_dodge(.2)
-# 
-# ggplot(Sum, aes(x = Algoritmo, y = mean, color = Algoritmo)) +
-#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
-#   geom_point(shape=15, size=4, position=pd) +
-#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
-#   scale_color_manual(values=c("black", "red", "green"))
-# ylab("Logaritmo de Rendimiento")
+Sum = Summarize(T.sqrt ~ Objetos + Architecture, data=Data, digits=4)
+
+#Agregamos el se
+
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits=3)
+Sum
+
+#Ordenamos
+Sum$Objetos = factor(Sum$Objetos, levels=unique(Sum$Objetos))
+
+#Graficamos
+
+pd=position_dodge(.2)
+
+ggplot(Sum, aes(x = Objetos, y = mean, color = Architecture)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+  theme_bw() + theme(axis.title = element_text(face="bold")) + 
+  scale_color_manual(values=c("black", "red", "green"))
+ylab("Objetos")
 
 
 
 
 
+Sum = Summarize(T.sqrt ~ Effects + Architecture, data=Data, digits=4)
+
+#Agregamos el se
+
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits=3)
+Sum
+
+#Ordenamos
+Sum$Effects = factor(Sum$Effects, levels=unique(Sum$Effects))
+
+#Graficamos
+
+pd=position_dodge(.2)
+
+ggplot(Sum, aes(x = Effects, y = mean, color = Architecture)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+  theme_bw() + theme(axis.title = element_text(face="bold")) + 
+  scale_color_manual(values=c("black", "red", "green"))
+ylab("Efectos")
+
+
+
+Sum = Summarize(T.sqrt ~ Resolution + Architecture, data=Data, digits=4)
+
+#Agregamos el se
+
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits=3)
+Sum
+
+#Ordenamos
+Sum$Resolution = factor(Sum$Resolution, levels=unique(Sum$Resolution))
+
+#Graficamos
+
+pd=position_dodge(.2)
+
+ggplot(Sum, aes(x = Resolution, y = mean, color = Architecture)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+  theme_bw() + theme(axis.title = element_text(face="bold")) + 
+  scale_color_manual(values=c("black", "red", "green"))
+ylab("Resolucion")
 
 
 
 
+#GRAFICO PRINICIPAL - PROMEDIOS TRANSFORMADOS
 
 
+Sum = Summarize(T.sqrt ~ Architecture, data=Data, digits=3)
+
+#Agregamos el se
+
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits=3)
+Sum
+
+#Ordenamos
+Sum$Architecture = factor(Sum$Architecture, levels=unique(Sum$Architecture))
+
+#Graficamos
+
+pd=position_dodge(.2)
+
+ggplot(Sum, aes(x = Architecture, y = mean, color = Architecture)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+  geom_point(shape=15, size=4, position=pd) +
+  theme_bw() + theme(axis.title = element_text(face="bold")) + 
+  scale_color_manual(values=c("black", "red", "green"))
+ylab("Raiz cuadrada de arquitectura")
+
+#Ahora des-transformemos
+
+Sum = Summarize(T.sqrt ~ Architecture, data=Data, digits=3)
+
+
+Sum$mean = Sum$mean ^ 2
+Sum$sd = Sum$sd ^ 2
+Sum
+
+#Agregamos el se
+
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits=3)
+Sum
+
+#Ordenamos
+Sum$Architecture = factor(Sum$Architecture, levels=unique(Sum$Architecture))
+
+#Graficamos
+
+pd=position_dodge(.2)
+
+ggplot(Sum, aes(x = Architecture, y = mean, color = Architecture)) +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+  geom_point(shape=15, size=4, position=pd) +
+  theme_bw() + theme(axis.title = element_text(face="bold")) + 
+  scale_color_manual(values=c("black", "red", "green"))
+ylab("Originales de Arquitectura")
 
 
