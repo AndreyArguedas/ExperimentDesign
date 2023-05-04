@@ -182,9 +182,7 @@ plot(fitted(model), residuals(model))
 plot(model)
 
 
-
 #Prueba de LEVEN para homocedasticidad 
-#Para esta prueba mas bien queremos un p-value alto
 leveneTest(T.sqrt ~ Objetos * Arquitectura * Efectos * Resolucion, data=Data)
 
 
