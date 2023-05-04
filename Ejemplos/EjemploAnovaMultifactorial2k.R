@@ -259,4 +259,4 @@ ggplot(Sum, aes(x = Algoritmo, y = mean, color = Algoritmo)) +
   geom_point(shape=15, size=4, position=pd) +
   theme_bw() + theme(axis.title = element_text(face="bold")) + 
   scale_color_manual(values=c("black", "red", "green"))
-ylab("Logaritmo de Rendimiento")
+ylab("Originales de Rendimiento")
