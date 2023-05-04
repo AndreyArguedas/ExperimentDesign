@@ -129,26 +129,9 @@ str(Data)
 summary(Data)
 
 
-
-data_apu = Data[Data$Architecture == "APU",]
-headTail(data_apu)
-summary(data_apu)
+#Summarize(RunningTime ~ Objetos * Effects, data=Data, digits=4)
 
 
-#Summarize(RunningTime ~ Objetos * Effects, data=data_apu, digits=4)
-
-plotNormalHistogram(Data[Data$Architecture == "APU",]$RunningTime, main="APU")
-plotNormalHistogram(Data[Data$Architecture == "CPU",]$RunningTime, main="CPU")
-plotNormalHistogram(Data[Data$Architecture == "GPU",]$RunningTime, main="GPU")
-
-
-#Grafico simple de interaccion, se hace antes de analisis de varianzas y modelos
-
-interaction.plot(x.factor= Data$Objetos,
-                 trace.factor= Data$Architecture,
-                 response = Data$RunningTime,
-                 fun=mean, type="b", col=c("black", "red", "green"),
-                 pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
 #Grafico simple de interaccion, se hace antes de analisis de varianzas y modelos
 
@@ -174,7 +157,7 @@ interaction.plot(x.factor= Data$Resolution,
 #Definimos Modelo Lineal y Anova
 
 
-model = lm(RunningTime ~ Objetos * Effects * Resolution
+model = lm(RunningTime ~ Objetos * Architecture * Effects * Resolution
            , data=Data)
 
 Anova(model, type="II")
@@ -193,7 +176,7 @@ plot(model)
 
 T.sqrt = sqrt(Data$RunningTime)
 
-model = lm(T.sqrt ~ Objetos * Effects * Resolution, data=Data)
+model = lm(T.sqrt ~ Objetos * Architecture * Effects * Resolution, data=Data)
 
 Anova(model, type="II")
 
@@ -205,54 +188,149 @@ plot(fitted(model), residuals(model))
 
 plot(model)
 
-
-#TRANSFORMACION DE DATOS - POR RAIZ CUBICA
-
-#La transformacion se aplica sobre la variable dependiente
-T.cub = sign(Data$RunningTime) * abs(Data$RunningTime) ^ (1/3)
-
-model = lm(T.cub ~ Objetos * Effects * Resolution
-           , data=Data)
-
-Anova(model, type="II")
-
-x =  residuals(model)
-plotNormalHistogram(x)
-
-#Ver el patron homcedasteicidad
-plot(fitted(model), residuals(model))
-
-plot(model)
 
 
 #Prueba de LEVEN para homocedasticidad 
 #Para esta prueba mas bien queremos un p-value alto
-leveneTest(T.cub ~ Objetos * Effects * Resolution, data=Data)
+leveneTest(T.sqrt ~ Objetos * Architecture * Effects * Resolution, data=Data)
 
 
 
-# #TRANSFORMACION DE DATOS - POR LOGARITMO
+#Analisis post-hoc con los datos transformados
+
+
+#Analisis post-hoc con los datos transformados
+marginal = lsmeans(model, pairwise ~ Architecture,
+                   adjust = "tukey")
+
+#Con CLD podemos agregar letras a cada grupo
+CLD = cld(marginal, alpha=0.05, Letters = letters, adjust="tukey")
+
+#Grupos con distintas letras en el group son estadisticamente distintos
+#Si comparten letra es que son iguales
+CLD
+
+
+#Ahora hacemos post-hoc pero por la variable Tiempo Resolucion
+
+
+#Analisis post-hoc con los datos transformados
+marginal = lsmeans(model, pairwise ~ Effects,
+                   adjust = "tukey")
+
+#Con CLD podemos agregar letras a cada grupo
+CLD = cld(marginal, alpha=0.05, Letters = letters, adjust="tukey")
+
+#Grupos con distintas letras en el group son estadisticamente distintos
+#Si comparten letra es que son iguales
+CLD
+
+
+
+
+#Final part
+
+# #Graficos Finales
+# Sum = Summarize(T.log ~ Entrenamiento + Algoritmo, data=Data, digits=3)
 # 
-# #La transformacion se aplica sobre la variable dependiente
-# T.log = log(Data$RunningTime)
+# #Agregamos el se
 # 
-# model = lm(T.log ~ Objetos * Effects * Resolution
-#            , data=Data)
+# Sum$se = Sum$sd / sqrt(Sum$n)
+# Sum$se = signif(Sum$se, digits=3)
+# Sum
 # 
-# Anova(model, type="II")
+# #Ordenamos
+# Sum$Entrenamiento = factor(Sum$Entrenamiento, levels=unique(Sum$Entrenamiento))
 # 
-# x =  residuals(model)
-# plotNormalHistogram(x)
+# #Graficamos
 # 
-# #Ver el patron homcedasteicidad
-# plot(fitted(model), residuals(model))
+# pd=position_dodge(.2)
 # 
-# plot(model)
-
-
-
-
-
+# ggplot(Sum, aes(x = Entrenamiento, y = mean, color = Algoritmo)) +
+#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
+#   scale_color_manual(values=c("black", "red", "green"))
+# ylab("Rendimiento")
+# 
+# #Graficos Finales
+# Sum = Summarize(T.log ~ Acelerador + Algoritmo, data=Data, digits=3)
+# 
+# #Agregamos el se
+# 
+# Sum$se = Sum$sd / sqrt(Sum$n)
+# Sum$se = signif(Sum$se, digits=3)
+# Sum
+# 
+# #Ordenamos
+# Sum$Entrenamiento = factor(Sum$Acelerador, levels=unique(Sum$Acelerador))
+# 
+# #Graficamos
+# 
+# pd=position_dodge(.2)
+# 
+# ggplot(Sum, aes(x = Acelerador, y = mean, color = Algoritmo)) +
+#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
+#   scale_color_manual(values=c("black", "red", "green"))
+# ylab("Rendimiento")
+# 
+# 
+# 
+# 
+# #GRAFICO PRINICIPAL - PROMEDIOS TRANSFORMADOS
+# 
+# 
+# Sum = Summarize(T.log ~ Algoritmo, data=Data, digits=3)
+# 
+# #Agregamos el se
+# 
+# Sum$se = Sum$sd / sqrt(Sum$n)
+# Sum$se = signif(Sum$se, digits=3)
+# Sum
+# 
+# #Ordenamos
+# Sum$Algoritmo = factor(Sum$Algoritmo, levels=unique(Sum$Algoritmo))
+# 
+# #Graficamos
+# 
+# pd=position_dodge(.2)
+# 
+# ggplot(Sum, aes(x = Algoritmo, y = mean, color = Algoritmo)) +
+#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+#   geom_point(shape=15, size=4, position=pd) +
+#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
+#   scale_color_manual(values=c("black", "red", "green"))
+# ylab("Logaritmo de Rendimiento")
+# 
+# 
+# #Ahora des-transformemos
+# 
+# Sum = Summarize(T.log ~ Algoritmo, data=Data, digits=3)
+# 
+# 
+# Sum$mean = exp(Sum$mean)
+# Sum$sd = exp(Sum$sd )
+# Sum
+# 
+# #Agregamos el se
+# 
+# Sum$se = Sum$sd / sqrt(Sum$n)
+# Sum$se = signif(Sum$se, digits=3)
+# Sum
+# 
+# #Ordenamos
+# Sum$Algoritmo = factor(Sum$Algoritmo, levels=unique(Sum$Algoritmo))
+# 
+# #Graficamos
+# 
+# pd=position_dodge(.2)
+# 
+# ggplot(Sum, aes(x = Algoritmo, y = mean, color = Algoritmo)) +
+#   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
+#   geom_point(shape=15, size=4, position=pd) +
+#   theme_bw() + theme(axis.title = element_text(face="bold")) + 
+#   scale_color_manual(values=c("black", "red", "green"))
+# ylab("Logaritmo de Rendimiento")
 
 
 
