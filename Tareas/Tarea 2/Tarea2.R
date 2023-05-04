@@ -28,6 +28,8 @@ original_data <- readLines("Datos_tarea_2.txt")
 
 filtered_data = original_data
 
+#original_data
+
 #Preprocesamiento de los datos
 
 #Eliminando datos no necesarios
@@ -62,22 +64,19 @@ only_technical_data = only_technical_data[! empty_lines]
 only_technical_data
 
 
-#Convirtiendo las lineas de tipo  _(cantidad de objetos)(arquitectura)(efectos en la escena)-(resolución de la escena) en datos separados
+#Convirtiendo las lineas de tipo  
+#_(cantidad de objetos)(arquitectura)(efectos en la escena)-(resolución de la escena) 
+#en datos separados
 
 #Obteniendo la resolucion
 resolucion = str_remove_all(only_technical_data, regex(".*(?=-)"))
 resolucion = str_replace_all(resolucion, "-", "")
-
-resolucion
-
 
 #Obteniendo los efectos de la escena
 efectos = str_remove_all(only_technical_data, regex("(?=-).*"))
 efectos = str_remove_all(efectos, regex(".*GPU"))
 efectos = str_remove_all(efectos, regex(".*APU"))
 efectos = str_remove_all(efectos, regex(".*CPU"))
-
-efectos
 
 #Obteniendo los ARQUITECTURA de la escena
 arquitectura = str_remove_all(only_technical_data, regex(".*(?=GPU)"))
@@ -87,30 +86,25 @@ arquitectura = str_remove_all(arquitectura, regex("(?<=APU).*"))
 arquitectura = str_remove_all(arquitectura, regex(".*(?=CPU)"))
 arquitectura = str_remove_all(arquitectura, regex("(?<=CPU).*"))
 
-arquitectura
-
 #Obteniendo la cantidad de objetos de la escena
 objetos = str_remove_all(only_technical_data, regex("(?=GPU).*"))
 objetos = str_remove_all(objetos, regex("(?=CPU).*"))
 objetos = str_remove_all(objetos, regex("(?=APU).*"))
 objetos = str_replace_all(objetos, "_", "")
 
-objetos
-
-# create a data table from a data frame
-data_frame <- data.frame(RunningTime=rep(c(only_time_data)),
+# Create a data table from a data frame
+data_frame <- data.frame(TiempoResolucion=rep(c(only_time_data)),
                             Objetos=rep(c(objetos)),
-                            Architecture=rep(c(arquitectura)),
-                            Effects=rep(c(efectos)),
-                            Resolution=rep(c(resolucion)))
-
-data_frame
+                            Arquitectura=rep(c(arquitectura)),
+                            Efectos=rep(c(efectos)),
+                            Resolucion=rep(c(resolucion)))
 
 write.table(data_frame, "Datos2kTabla.txt", quote = FALSE, row.names=FALSE)
 
 
 # Se leen los datos y se guardan en la variable Data
-my_data <- read.table("Datos2kTabla.txt", header=TRUE, colClasses = c("numeric", "factor", "factor", "factor", "factor"))
+my_data <- read.table("Datos2kTabla.txt", header=TRUE, 
+                      colClasses = c("numeric", "factor", "factor", "factor", "factor"))
 Data = my_data
 
 # Se eliminan los datos originales de memoria
@@ -129,35 +123,34 @@ str(Data)
 summary(Data)
 
 
-#Summarize(RunningTime ~ Objetos * Effects, data=Data, digits=4)
+Summarize(TiempoResolucion ~ TechnicalData, data=Data, digits=4)
 
 
 
 #Grafico simple de interaccion, se hace antes de analisis de varianzas y modelos
 
 interaction.plot(x.factor= Data$Objetos,
-                 trace.factor= Data$Architecture,
-                 response = Data$RunningTime,
+                 trace.factor= Data$Arquitectura,
+                 response = Data$TiempoResolucion,
                  fun=mean, type="b", col=c("black", "red", "green"),
                  pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
-interaction.plot(x.factor= Data$Effects,
-                 trace.factor= Data$Architecture,
-                 response = Data$RunningTime,
+interaction.plot(x.factor= Data$Efectos,
+                 trace.factor= Data$Arquitectura,
+                 response = Data$TiempoResolucion,
                  fun=mean, type="b", col=c("black", "red", "green"),
                  pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
-interaction.plot(x.factor= Data$Resolution,
-                 trace.factor= Data$Architecture,
-                 response = Data$RunningTime,
+interaction.plot(x.factor= Data$Resolucion,
+                 trace.factor= Data$Arquitectura,
+                 response = Data$TiempoResolucion,
                  fun=mean, type="b", col=c("black", "red", "green"),
                  pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
 
 #Definimos Modelo Lineal y Anova
 
-
-model = lm(RunningTime ~ Objetos * Architecture * Effects * Resolution
+model = lm(TiempoResolucion ~ Objetos * Arquitectura * Efectos * Resolucion
            , data=Data)
 
 Anova(model, type="II")
@@ -174,9 +167,9 @@ plot(model)
 
 #Transformacion de datos - Por raiz cuadrada
 
-T.sqrt = sqrt(Data$RunningTime)
+T.sqrt = sqrt(Data$TiempoResolucion)
 
-model = lm(T.sqrt ~ Objetos * Architecture * Effects * Resolution, data=Data)
+model = lm(T.sqrt ~ Objetos * Arquitectura * Efectos * Resolucion, data=Data)
 
 Anova(model, type="II")
 
@@ -192,7 +185,7 @@ plot(model)
 
 #Prueba de LEVEN para homocedasticidad 
 #Para esta prueba mas bien queremos un p-value alto
-leveneTest(T.sqrt ~ Objetos * Architecture * Effects * Resolution, data=Data)
+leveneTest(T.sqrt ~ Objetos * Arquitectura * Efectos * Resolucion, data=Data)
 
 
 
@@ -200,7 +193,7 @@ leveneTest(T.sqrt ~ Objetos * Architecture * Effects * Resolution, data=Data)
 
 
 #Analisis post-hoc con los datos transformados
-marginal = lsmeans(model, pairwise ~ Architecture,
+marginal = lsmeans(model, pairwise ~ Arquitectura,
                    adjust = "tukey")
 
 #Con CLD podemos agregar letras a cada grupo
@@ -215,7 +208,7 @@ CLD
 
 
 #Analisis post-hoc con los datos transformados
-marginal = lsmeans(model, pairwise ~ Effects,
+marginal = lsmeans(model, pairwise ~ Efectos,
                    adjust = "tukey")
 
 #Con CLD podemos agregar letras a cada grupo
@@ -230,7 +223,7 @@ CLD
 
 #Final part
 
-Sum = Summarize(T.sqrt ~ Objetos + Architecture, data=Data, digits=4)
+Sum = Summarize(T.sqrt ~ Objetos + Arquitectura, data=Data, digits=4)
 
 #Agregamos el se
 
@@ -245,7 +238,7 @@ Sum$Objetos = factor(Sum$Objetos, levels=unique(Sum$Objetos))
 
 pd=position_dodge(.2)
 
-ggplot(Sum, aes(x = Objetos, y = mean, color = Architecture)) +
+ggplot(Sum, aes(x = Objetos, y = mean, color = Arquitectura)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
   theme_bw() + theme(axis.title = element_text(face="bold")) + 
   scale_color_manual(values=c("black", "red", "green"))
@@ -255,7 +248,7 @@ ylab("Objetos")
 
 
 
-Sum = Summarize(T.sqrt ~ Effects + Architecture, data=Data, digits=4)
+Sum = Summarize(T.sqrt ~ Efectos + Arquitectura, data=Data, digits=4)
 
 #Agregamos el se
 
@@ -264,13 +257,13 @@ Sum$se = signif(Sum$se, digits=3)
 Sum
 
 #Ordenamos
-Sum$Effects = factor(Sum$Effects, levels=unique(Sum$Effects))
+Sum$Efectos = factor(Sum$Efectos, levels=unique(Sum$Efectos))
 
 #Graficamos
 
 pd=position_dodge(.2)
 
-ggplot(Sum, aes(x = Effects, y = mean, color = Architecture)) +
+ggplot(Sum, aes(x = Efectos, y = mean, color = Arquitectura)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
   theme_bw() + theme(axis.title = element_text(face="bold")) + 
   scale_color_manual(values=c("black", "red", "green"))
@@ -278,7 +271,7 @@ ylab("Efectos")
 
 
 
-Sum = Summarize(T.sqrt ~ Resolution + Architecture, data=Data, digits=4)
+Sum = Summarize(T.sqrt ~ Resolucion + Arquitectura, data=Data, digits=4)
 
 #Agregamos el se
 
@@ -287,13 +280,13 @@ Sum$se = signif(Sum$se, digits=3)
 Sum
 
 #Ordenamos
-Sum$Resolution = factor(Sum$Resolution, levels=unique(Sum$Resolution))
+Sum$Resolucion = factor(Sum$Resolution, levels=unique(Sum$Resolucion))
 
 #Graficamos
 
 pd=position_dodge(.2)
 
-ggplot(Sum, aes(x = Resolution, y = mean, color = Architecture)) +
+ggplot(Sum, aes(x = Resolucion, y = mean, color = Arquitectura)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
   theme_bw() + theme(axis.title = element_text(face="bold")) + 
   scale_color_manual(values=c("black", "red", "green"))
@@ -305,7 +298,7 @@ ylab("Resolucion")
 #GRAFICO PRINICIPAL - PROMEDIOS TRANSFORMADOS
 
 
-Sum = Summarize(T.sqrt ~ Architecture, data=Data, digits=3)
+Sum = Summarize(T.sqrt ~ Arquitectura, data=Data, digits=3)
 
 #Agregamos el se
 
@@ -314,13 +307,13 @@ Sum$se = signif(Sum$se, digits=3)
 Sum
 
 #Ordenamos
-Sum$Architecture = factor(Sum$Architecture, levels=unique(Sum$Architecture))
+Sum$Arquitectura = factor(Sum$Arquitectura, levels=unique(Sum$Arquitectura))
 
 #Graficamos
 
 pd=position_dodge(.2)
 
-ggplot(Sum, aes(x = Architecture, y = mean, color = Architecture)) +
+ggplot(Sum, aes(x = Arquitectura, y = mean, color = Arquitectura)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
   geom_point(shape=15, size=4, position=pd) +
   theme_bw() + theme(axis.title = element_text(face="bold")) + 
@@ -329,7 +322,7 @@ ylab("Raiz cuadrada de arquitectura")
 
 #Ahora des-transformemos
 
-Sum = Summarize(T.sqrt ~ Architecture, data=Data, digits=3)
+Sum = Summarize(T.sqrt ~ Arquitectura, data=Data, digits=3)
 
 
 Sum$mean = Sum$mean ^ 2
@@ -343,13 +336,13 @@ Sum$se = signif(Sum$se, digits=3)
 Sum
 
 #Ordenamos
-Sum$Architecture = factor(Sum$Architecture, levels=unique(Sum$Architecture))
+Sum$Arquitectura = factor(Sum$Arquitectura, levels=unique(Sum$Arquitectura))
 
 #Graficamos
 
 pd=position_dodge(.2)
 
-ggplot(Sum, aes(x = Architecture, y = mean, color = Architecture)) +
+ggplot(Sum, aes(x = Arquitectura, y = mean, color = Arquitectura)) +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, size = 0.7, position = pd) +
   geom_point(shape=15, size=4, position=pd) +
   theme_bw() + theme(axis.title = element_text(face="bold")) + 
