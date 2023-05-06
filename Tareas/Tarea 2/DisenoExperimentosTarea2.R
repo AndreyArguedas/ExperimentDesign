@@ -43,7 +43,6 @@ filtered_data = str_remove_all(filtered_data, regex(".*(?=_)"))
 empty_lines = grepl('^\\s*$', filtered_data)
 filtered_data = filtered_data[! empty_lines]
 
-filtered_data
 
 #Datos filtrados para obtener solo el tiempo de ejecucion
 
@@ -53,15 +52,11 @@ only_time_data = str_replace_all(only_time_data, ",", ".")
 empty_lines = grepl('^\\s*$', only_time_data)
 only_time_data = only_time_data[! empty_lines]
 
-only_time_data
-
 #Datos filtrados para obtener solo la columna de mas informacion
 only_technical_data = str_remove_all(filtered_data, regex("^[0-9].*(?=.).*"))
 #Eliminando todos las lineas que quedaron en blanco
 empty_lines = grepl('^\\s*$', only_technical_data)
 only_technical_data = only_technical_data[! empty_lines]
-
-only_technical_data
 
 
 #Convirtiendo las lineas de tipo  
@@ -93,7 +88,7 @@ objetos = str_remove_all(objetos, regex("(?=APU).*"))
 objetos = str_replace_all(objetos, "_", "")
 
 # Create a data table from a data frame
-data_frame <- data.frame(TiempoResolucion=rep(c(only_time_data)),
+data_frame <- data.frame(TiempoSintetizado=rep(c(only_time_data)),
                             Objetos=rep(c(objetos)),
                             Arquitectura=rep(c(arquitectura)),
                             Efectos=rep(c(efectos)),
@@ -123,34 +118,30 @@ str(Data)
 summary(Data)
 
 
-Summarize(TiempoResolucion ~ TechnicalData, data=Data, digits=4)
-
-
-
 #Grafico simple de interaccion, se hace antes de analisis de varianzas y modelos
 
 interaction.plot(x.factor= Data$Objetos,
                  trace.factor= Data$Arquitectura,
-                 response = Data$TiempoResolucion,
+                 response = Data$TiempoSintetizado,
                  fun=mean, type="b", col=c("black", "red", "green"),
                  pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
 interaction.plot(x.factor= Data$Efectos,
                  trace.factor= Data$Arquitectura,
-                 response = Data$TiempoResolucion,
+                 response = Data$TiempoSintetizado,
                  fun=mean, type="b", col=c("black", "red", "green"),
                  pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
 interaction.plot(x.factor= Data$Resolucion,
                  trace.factor= Data$Arquitectura,
-                 response = Data$TiempoResolucion,
+                 response = Data$TiempoSintetizado,
                  fun=mean, type="b", col=c("black", "red", "green"),
                  pch=c(19,17,15), fixed=TRUE, leg.bty="o")
 
 
 #Definimos Modelo Lineal y Anova
 
-model = lm(TiempoResolucion ~ Objetos * Arquitectura * Efectos * Resolucion
+model = lm(TiempoSintetizado ~ Objetos * Arquitectura * Efectos * Resolucion
            , data=Data)
 
 Anova(model, type="II")
@@ -167,7 +158,7 @@ plot(model)
 
 #Transformacion de datos - Por raiz cuadrada
 
-T.sqrt = sqrt(Data$TiempoResolucion)
+T.sqrt = sqrt(Data$TiempoSintetizado)
 
 model = lm(T.sqrt ~ Objetos * Arquitectura * Efectos * Resolucion, data=Data)
 
@@ -193,46 +184,35 @@ leveneTest(T.sqrt ~ Objetos * Arquitectura * Efectos * Resolucion, data=Data)
 #Analisis post-hoc con los datos transformados
 marginal = lsmeans(model, pairwise ~ Arquitectura,
                    adjust = "tukey")
-
-#Con CLD podemos agregar letras a cada grupo
 CLD = cld(marginal, alpha=0.05, Letters = letters, adjust="tukey")
-
-#Grupos con distintas letras en el group son estadisticamente distintos
-#Si comparten letra es que son iguales
 CLD
 
 
-#Ahora hacemos post-hoc pero por la variable Tiempo Resolucion
-
-
-#Analisis post-hoc con los datos transformados
 marginal = lsmeans(model, pairwise ~ Efectos,
                    adjust = "tukey")
 
-#Con CLD podemos agregar letras a cada grupo
 CLD = cld(marginal, alpha=0.05, Letters = letters, adjust="tukey")
 
-#Grupos con distintas letras en el group son estadisticamente distintos
-#Si comparten letra es que son iguales
+CLD
+
+marginal = lsmeans(model, pairwise ~ Resolucion,
+                   adjust = "tukey")
+
+CLD = cld(marginal, alpha=0.05, Letters = letters, adjust="tukey")
+
 CLD
 
 
+#Graficos Finales
 
-
-#Final part
-
+#Factor de objetos
 Sum = Summarize(T.sqrt ~ Objetos + Arquitectura, data=Data, digits=4)
-
-#Agregamos el se
 
 Sum$se = Sum$sd / sqrt(Sum$n)
 Sum$se = signif(Sum$se, digits=3)
 Sum
 
-#Ordenamos
 Sum$Objetos = factor(Sum$Objetos, levels=unique(Sum$Objetos))
-
-#Graficamos
 
 pd=position_dodge(.2)
 
@@ -243,21 +223,16 @@ ggplot(Sum, aes(x = Objetos, y = mean, color = Arquitectura)) +
 ylab("Objetos")
 
 
-
-
-
+#Factor de efectos
 Sum = Summarize(T.sqrt ~ Efectos + Arquitectura, data=Data, digits=4)
-
-#Agregamos el se
 
 Sum$se = Sum$sd / sqrt(Sum$n)
 Sum$se = signif(Sum$se, digits=3)
 Sum
 
-#Ordenamos
+
 Sum$Efectos = factor(Sum$Efectos, levels=unique(Sum$Efectos))
 
-#Graficamos
 
 pd=position_dodge(.2)
 
@@ -267,20 +242,16 @@ ggplot(Sum, aes(x = Efectos, y = mean, color = Arquitectura)) +
   scale_color_manual(values=c("black", "red", "green"))
 ylab("Efectos")
 
-
+#Factor de resolucion
 
 Sum = Summarize(T.sqrt ~ Resolucion + Arquitectura, data=Data, digits=4)
-
-#Agregamos el se
 
 Sum$se = Sum$sd / sqrt(Sum$n)
 Sum$se = signif(Sum$se, digits=3)
 Sum
 
-#Ordenamos
-Sum$Resolucion = factor(Sum$Resolution, levels=unique(Sum$Resolucion))
+Sum$Resolucion = factor(Sum$Resolucion, levels=unique(Sum$Resolucion))
 
-#Graficamos
 
 pd=position_dodge(.2)
 
@@ -295,19 +266,15 @@ ylab("Resolucion")
 
 #GRAFICO PRINICIPAL - PROMEDIOS TRANSFORMADOS
 
-
 Sum = Summarize(T.sqrt ~ Arquitectura, data=Data, digits=3)
 
-#Agregamos el se
 
 Sum$se = Sum$sd / sqrt(Sum$n)
 Sum$se = signif(Sum$se, digits=3)
 Sum
 
-#Ordenamos
 Sum$Arquitectura = factor(Sum$Arquitectura, levels=unique(Sum$Arquitectura))
 
-#Graficamos
 
 pd=position_dodge(.2)
 
@@ -322,21 +289,15 @@ ylab("Raiz cuadrada de arquitectura")
 
 Sum = Summarize(T.sqrt ~ Arquitectura, data=Data, digits=3)
 
-
 Sum$mean = Sum$mean ^ 2
 Sum$sd = Sum$sd ^ 2
 Sum
-
-#Agregamos el se
 
 Sum$se = Sum$sd / sqrt(Sum$n)
 Sum$se = signif(Sum$se, digits=3)
 Sum
 
-#Ordenamos
 Sum$Arquitectura = factor(Sum$Arquitectura, levels=unique(Sum$Arquitectura))
-
-#Graficamos
 
 pd=position_dodge(.2)
 
