@@ -3,28 +3,28 @@ import sys
 
 # Define array to shuffle
 my_array = [
-            "5 min avg scenes\cloud\smoke-bvh.pbrt", 
-            "5 min avg scenes\cloud\smoke-kdtree.pbrt",
-            "5 min avg scenes\cloud\smoke-path.pbrt",
-            "5 min avg scenes\cloud\smoke-mlt.pbrt",
-            "5 min avg scenes\simple\spotfog-path.pbrt",
-            "5 min avg scenes\simple\spotfog-mlt.pbrt",
-            "5 min avg scenes\simple\spotfog-bvh.pbrt", 
-            "5 min avg scenes\simple\spotfog-kdtree.pbrt",
-            r"10 min avg scenes\buddha-fractal\buddha-fractal-bvh.pbrt",
-            r"10 min avg scenes\buddha-fractal\buddha-fractal-kdtree.pbrt",
-            r"10 min avg scenes\buddha-fractal\buddha-fractal-path.pbrt",
-            r"10 min avg scenes\buddha-fractal\buddha-fractal-mlt.pbrt",
-            r"30 min avg scenes\veach-bidir\bidir-bvh.pbrt",
-            r"30 min avg scenes\veach-bidir\bidir-kdtree.pbrt",
-            r"30 min avg scenes\veach-bidir\bidir-path.pbrt",
-            r"30 min avg scenes\veach-bidir\bidir-mlt.pbrt"
+            "5minAvgScenes\cloud\smoke-bvh.pbrt", 
+            "5minAvgScenes\cloud\smoke-kdtree.pbrt",
+            "5minAvgScenes\cloud\smoke-path.pbrt",
+            "5minAvgScenes\cloud\smoke-mlt.pbrt",
+            "5minAvgScenes\simple\spotfog-path.pbrt",
+            "5minAvgScenes\simple\spotfog-mlt.pbrt",
+            "5minAvgScenes\simple\spotfog-bvh.pbrt", 
+            "5minAvgScenes\simple\spotfog-kdtree.pbrt",
+            r"10minAvgScenes\buddha-fractal\buddha-fractal-bvh.pbrt",
+            r"10minAvgScenes\buddha-fractal\buddha-fractal-kdtree.pbrt",
+            r"10minAvgScenes\buddha-fractal\buddha-fractal-path.pbrt",
+            r"10minAvgScenes\buddha-fractal\buddha-fractal-mlt.pbrt",
+            r"30minAvgScenes\veach-bidir\bidir-bvh.pbrt",
+            r"30minAvgScenes\veach-bidir\bidir-kdtree.pbrt",
+            r"30minAvgScenes\veach-bidir\bidir-path.pbrt",
+            r"30minAvgScenes\veach-bidir\bidir-mlt.pbrt"
             ]
 
 # A dummy just to debug the whole process with very simple images
-dummy_array = ["fast test\killeroo-simple.pbrt",
-            "fast test\killeroo-simple-bvh.pbrt", 
-            "fast test\killeroo-simple-kdtree.pbrt",
+dummy_array = ["fastTest\killeroo-simple.pbrt",
+            "fastTest\killeroo-simple-bvh.pbrt", 
+            "fastTest\killeroo-simple-kdtree.pbrt",
             ]
 
 #my_array = dummy_array
@@ -48,7 +48,7 @@ print('Once the raffle is done lets start running pbrt...')
 """ import subprocess
 
 # Execute command
-command = ".\pbrt.exe '.\fast test\killeroo-simple.pbrt' > output.txt 2>&1"  # replace this with your command
+command = ".\pbrt.exe '.\fastTest\killeroo-simple.pbrt' > output.txt 2>&1"  # replace this with your command
 # Execute command and capture output
 completed_process = subprocess.run(command, shell=True, capture_output=True, text=True)
 

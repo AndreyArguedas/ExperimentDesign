@@ -1,3 +1,3 @@
-fast test\killeroo-simple-bvh.pbrt
-fast test\killeroo-simple.pbrt
-fast test\killeroo-simple-kdtree.pbrt
+fastTest\killeroo-simple-bvh.pbrt
+fastTest\killeroo-simple.pbrt
+fastTest\killeroo-simple-kdtree.pbrt
