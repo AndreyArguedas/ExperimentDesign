@@ -12,9 +12,9 @@ fi
 # Print each line
 for line in $text_lines; do
     if [ "$saveAllLogs" = true ]; then
-        concatenated_string=".\\pbrt.exe '.\\$line' > testing$counter.txt 2>&1"
+        concatenated_string=".\\pbrt '.\\$line' > testing$counter.txt 2>&1"
     else
-        concatenated_string=".\\pbrt.exe '.\\$line'"
+        concatenated_string="./pbrt './$line'"
     fi
     
     echo "$line" >> timeTook.txt
