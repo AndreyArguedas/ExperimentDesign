@@ -1,0 +1,10 @@
+Imagenes con problemas
+smoke-mlt
+spotfog-path
+buddha-fractal-mlt
+buddha-fractal-path *
+buddha-fractal-bvh * 
+bidir-mlt
+
+
+
