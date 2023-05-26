@@ -1,0 +1,48 @@
+5minAvgScenes/cloud/smoke-path.pbrt
+3598.09user 2.23system 15:08.48elapsed 396%CPU (0avgtext+0avgdata 162360maxresident)k
+12472inputs+6016outputs (65major+54145minor)pagefaults 0swaps
+5minAvgScenes/cloud/smoke-bvh.pbrt
+3560.34user 2.76system 15:03.27elapsed 394%CPU (0avgtext+0avgdata 162508maxresident)k
+8inputs+6000outputs (1major+54179minor)pagefaults 0swaps
+10minAvgScenes/buddha-fractal/buddha-fractal-mlt.pbrt
+342.31user 0.15system 1:27.07elapsed 393%CPU (0avgtext+0avgdata 95092maxresident)k
+13584inputs+7664outputs (31major+23818minor)pagefaults 0swaps
+30minAvgScenes/veach-bidir/bidir-kdtree.pbrt
+14208.20user 3.47system 59:23.00elapsed 398%CPU (0avgtext+0avgdata 33748maxresident)k
+528inputs+6080outputs (6major+11154minor)pagefaults 0swaps
+10minAvgScenes/buddha-fractal/buddha-fractal-kdtree.pbrt
+2588.85user 0.84system 10:53.19elapsed 396%CPU (0avgtext+0avgdata 87340maxresident)k
+8inputs+6680outputs (1major+22572minor)pagefaults 0swaps
+5minAvgScenes/cloud/smoke-mlt.pbrt
+1078.26user 0.46system 4:31.20elapsed 397%CPU (0avgtext+0avgdata 166776maxresident)k
+8inputs+4832outputs (1major+58850minor)pagefaults 0swaps
+5minAvgScenes/simple/spotfog-path.pbrt
+350.55user 0.17system 1:28.60elapsed 395%CPU (0avgtext+0avgdata 27136maxresident)k
+16inputs+3192outputs (1major+5495minor)pagefaults 0swaps
+30minAvgScenes/veach-bidir/bidir-path.pbrt
+2727.31user 0.82system 11:27.85elapsed 396%CPU (0avgtext+0avgdata 50964maxresident)k
+160inputs+11512outputs (5major+11420minor)pagefaults 0swaps
+30minAvgScenes/veach-bidir/bidir-mlt.pbrt
+476.76user 0.20system 2:00.74elapsed 395%CPU (0avgtext+0avgdata 40184maxresident)k
+8inputs+4096outputs (1major+8833minor)pagefaults 0swaps
+5minAvgScenes/cloud/smoke-kdtree.pbrt
+4111.61user 0.95system 17:13.23elapsed 398%CPU (0avgtext+0avgdata 162524maxresident)k
+8inputs+5360outputs (1major+54182minor)pagefaults 0swaps
+5minAvgScenes/simple/spotfog-bvh.pbrt
+1905.57user 0.43system 7:57.66elapsed 399%CPU (0avgtext+0avgdata 27512maxresident)k
+8inputs+3152outputs (1major+5577minor)pagefaults 0swaps
+5minAvgScenes/simple/spotfog-mlt.pbrt
+127.53user 0.14system 0:32.40elapsed 393%CPU (0avgtext+0avgdata 37496maxresident)k
+8inputs+2896outputs (1major+8107minor)pagefaults 0swaps
+10minAvgScenes/buddha-fractal/buddha-fractal-path.pbrt
+1863.75user 0.54system 7:47.88elapsed 398%CPU (0avgtext+0avgdata 88116maxresident)k
+8inputs+7120outputs (1major+22088minor)pagefaults 0swaps
+5minAvgScenes/simple/spotfog-kdtree.pbrt
+2855.46user 0.61system 11:57.74elapsed 397%CPU (0avgtext+0avgdata 27324maxresident)k
+8inputs+4208outputs (1major+9037minor)pagefaults 0swaps
+10minAvgScenes/buddha-fractal/buddha-fractal-bvh.pbrt
+1811.89user 0.49system 7:34.94elapsed 398%CPU (0avgtext+0avgdata 88104maxresident)k
+8inputs+7176outputs (1major+22070minor)pagefaults 0swaps
+30minAvgScenes/veach-bidir/bidir-bvh.pbrt
+9173.39user 2.56system 38:18.00elapsed 399%CPU (0avgtext+0avgdata 32736maxresident)k
+8inputs+7016outputs (1major+7008minor)pagefaults 0swaps

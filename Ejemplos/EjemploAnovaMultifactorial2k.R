@@ -113,7 +113,7 @@ plotNormalHistogram(x)
 plot(fitted(model), residuals(model))
 
 #Prueba de LEVEN para homocedasticidad 
-#Para esta prueba mas bien queremos un p-value alto
+#Para esta prueba queremos un p-value alto
 leveneTest(T.log ~ Entrenamiento * Algoritmo * Acelerador
            , data=Data)
 

@@ -1,0 +1,16 @@
+5minAvgScenes\cloud\smoke-bvh.pbrt
+5minAvgScenes\simple\spotfog-path.pbrt
+10minAvgScenes\buddha-fractal\buddha-fractal-mlt.pbrt
+10minAvgScenes\buddha-fractal\buddha-fractal-bvh.pbrt
+5minAvgScenes\cloud\smoke-path.pbrt
+5minAvgScenes\simple\spotfog-mlt.pbrt
+10minAvgScenes\buddha-fractal\buddha-fractal-path.pbrt
+30minAvgScenes\veach-bidir\bidir-kdtree.pbrt
+5minAvgScenes\cloud\smoke-kdtree.pbrt
+5minAvgScenes\simple\spotfog-kdtree.pbrt
+5minAvgScenes\simple\spotfog-bvh.pbrt
+10minAvgScenes\buddha-fractal\buddha-fractal-kdtree.pbrt
+30minAvgScenes\veach-bidir\bidir-bvh.pbrt
+5minAvgScenes\cloud\smoke-mlt.pbrt
+30minAvgScenes\veach-bidir\bidir-path.pbrt
+30minAvgScenes\veach-bidir\bidir-mlt.pbrt
